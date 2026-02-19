@@ -22,6 +22,7 @@ const userRouter = require("./routes/user.js");
 mongoose.set("strictPopulate", false);
 
 const dbUrl = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/wanderlust";
+const secret = process.env.SECRET || "fallbacksecret123";
 
 main()
   .then(() => {
@@ -45,7 +46,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 const store = MongoStore.create({
   mongoUrl: dbUrl,
   crypto: {
-    secret: process.env.SECRET,
+    secret: secret,
   },
   touchAfter: 24 * 3600,
 });
@@ -56,7 +57,7 @@ store.on("error", (err) => {
 
 const sessionOptions = {
   store,
-  secret: process.env.SECRET,
+  secret: secret,
   resave: false,
   saveUninitialized: false, // ✅ fix
   cookie: {
@@ -94,12 +95,16 @@ app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
 app.use("/", userRouter);
 
+app.all("*", (req, res, next) => {
+  next(new ExpressError(404, "Page Not Found!"));
+});
+
 app.use((err, req, res, next) => {
   if (res.headersSent) {
     return next(err);
   }
 
-  let { statusCode = 500, message = "Something went wrong!" } = err;
+  res.status(statusCode).render("error.ejs", { err, message });
 
   res.status(statusCode).render("error.ejs", { err });
 });
