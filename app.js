@@ -10,7 +10,6 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/ExpressError.js");
 const session = require("express-session");
-const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -43,33 +42,16 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
-const store = MongoStore.create({
-  mongoUrl: dbUrl,
-  crypto: {
-    secret: secret,
-  },
-  touchAfter: 24 * 3600,
-});
-
-store.on("error", (err) => {
-  console.log("Mongo Session Store Error:", err);
-});
-
 const sessionOptions = {
-  store,
   secret: secret,
   resave: false,
-  saveUninitialized: false, // ✅ fix
+  saveUninitialized: false,
   cookie: {
     expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
     maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true,
   },
 };
-
-// app.get("/", (req, res) => {
-//   res.send("Hii i am root");
-// });
 
 app.use(session(sessionOptions));
 app.use(flash());
@@ -95,11 +77,12 @@ app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
 app.use("/", userRouter);
 
+app.all("*", (req, res, next) => {
+  next(new ExpressError(404, "Page Not Found!"));
+});
+
 app.use((err, req, res, next) => {
-  if (res.headersSent) return next(err);
-
   let { statusCode = 500, message = "Something went wrong!" } = err;
-
   res.status(statusCode).render("error.ejs", { err, message });
 });
 
