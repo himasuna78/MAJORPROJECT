@@ -96,13 +96,11 @@ app.use("/listings/:id/reviews", reviewsRouter);
 app.use("/", userRouter);
 
 app.use((err, req, res, next) => {
-  if (res.headersSent) {
-    return next(err);
-  }
+  if (res.headersSent) return next(err);
+
+  let { statusCode = 500, message = "Something went wrong!" } = err;
 
   res.status(statusCode).render("error.ejs", { err, message });
-
-  res.status(statusCode).render("error.ejs", { err });
 });
 
 const port = process.env.PORT || 8080;
