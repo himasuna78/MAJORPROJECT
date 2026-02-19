@@ -86,38 +86,15 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.get("/demouser", async(req, res) => {
-//     let fakeUser = new User ({
-//         email: "student12@gmail.com",
-//         username : "delta-student",
-//     });
-//    let registeredUser =  await User.register(fakeUser, "helloworld");
-//    res.send(registeredUser);
-// });
+app.get("/", (req, res) => {
+  res.redirect("/listings");
+});
 
 app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
 app.use("/", userRouter);
 
-// app.get("/testListing", async (req, res) => {
-//     let sampleListing = new Listing({
-//         title: "MY new Villa",
-//         description: "By the beach",
-//         price: 1500,
-//         location: "Calaguate, Goa",
-//         country: "India",
-//     });
-
-//     await sampleListing.save();
-//     console.log("sample was save");
-//     res.send("succesfully testing");
-// });
-app.all(/.*/, (req, res, next) => {
-  next(new ExpressError(404, "Page not Found!"));
-});
-
 app.use((err, req, res, next) => {
-  // ✅ Prevent double response
   if (res.headersSent) {
     return next(err);
   }
@@ -127,6 +104,8 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("error.ejs", { err });
 });
 
-app.listen(8080, () => {
-  console.log("server is listening on port 8080");
+const port = process.env.PORT || 8080;
+
+app.listen(port, () => {
+  console.log("server is listening on port", port);
 });
