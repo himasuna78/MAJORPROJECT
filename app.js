@@ -20,7 +20,7 @@ const userRouter = require("./routes/user.js");
 
 mongoose.set("strictPopulate", false);
 
-const dbUrl = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/wanderlust";
+const dbUrl = process.env.ATLASDB_URL || "mongodb://127.0.0.1:27017/StayAxis";
 const secret = process.env.SECRET || "fallbacksecret123";
 
 main()

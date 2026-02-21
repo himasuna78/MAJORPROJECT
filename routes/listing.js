@@ -37,7 +37,7 @@ router
     isLoggedIn,
     upload.single("listing[image]"),
     validateListing,
-    wrapAsync(listingController.createListing),
+    wrapAsync(listingController.createListing)
   );
 
 // ======================
@@ -55,7 +55,7 @@ router
     isLoggedIn,
     upload.single("listing[image]"),
     validateListing,
-    wrapAsync(listingController.updateListing),
+    wrapAsync(listingController.updateListing)
   )
   .delete(isLoggedIn, wrapAsync(listingController.destroyListing));
 
@@ -65,7 +65,7 @@ router
 router.get(
   "/:id/edit",
   isLoggedIn,
-  wrapAsync(listingController.renderEditForm),
+  wrapAsync(listingController.renderEditForm)
 );
 
 module.exports = router;
