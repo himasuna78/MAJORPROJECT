@@ -347,6 +347,83 @@ const sampleListings = [
     location: "Costa Rica",
     country: "Costa Rica",
   },
+  {
+    title: "Arctic Igloo Adventure",
+    description:
+      "Stay warm in a glass-roof igloo under the northern lights in Lapland.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1516139008598-8fbe3daa7d53?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aWdvb2x8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60",
+    },
+    price: 2200,
+    location: "Lapland",
+    country: "Finland",
+  },
+  {
+    title: "Geodesic Dome Retreat",
+    description:
+      "Relax in a modern dome retreat surrounded by desert landscapes.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1494526585095-c41746248156?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZG9tZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60",
+    },
+    price: 1900,
+    location: "Marrakech",
+    country: "Morocco",
+  },
+  {
+    title: "Floating Boat House",
+    description:
+      "Enjoy a calm stay in this beautifully designed boat house on the water.",
+    image: {
+      filename: "listingimage",
+      url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Ym9hdCUyMGhvdXNlJTIwb2NlcGFuZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60",
+    },
+    price: 2100,
+    location: "Amsterdam",
+    country: "Netherlands",
+  },
 ];
 
-module.exports = { data: sampleListings };
+const data = sampleListings.map((listing) => ({
+  ...listing,
+  category: listing.category || assignCategory(listing),
+}));
+
+function assignCategory(listing) {
+  const text =
+    `${listing.title} ${listing.description} ${listing.location} ${listing.country}`.toLowerCase();
+
+  if (text.match(/arctic|igloo|lapland/)) return "Arctic";
+  if (text.match(/dome|geodesic/)) return "Doms";
+  if (text.match(/boat|floating boat/)) return "Boats";
+  if (text.match(/castle|historic villa|historic cottage|scottish highlands/))
+    return "Castle";
+  if (text.match(/ski|mountain|banff|aspen|alps|rockies|montana/))
+    return "Mountain";
+  if (text.match(/treehouse|cabin|camp|lakefront|forest|rustic/))
+    return "Camping";
+  if (
+    text.match(
+      /loft|penthouse|apartment|brownstone|canal house|modern apartment/,
+    )
+  )
+    return "Rooms";
+  if (
+    text.match(
+      /city|new york|los angeles|miami|tokyo|amsterdam|boston|charleston/,
+    )
+  )
+    return "Iconic cities";
+  if (
+    text.match(
+      /beach|pool|island|bungalow|maldives|costa rica|bali|phuket|mykonos|fiji|dubai/,
+    )
+  )
+    return "Amazing pools";
+  if (text.match(/cotswolds|farm/)) return "Farms";
+
+  return "Trending";
+}
+
+module.exports = { data };

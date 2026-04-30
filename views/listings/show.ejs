@@ -4,7 +4,7 @@
 <!-- ✅ LISTING TITLE -->
 <!-- ========================= -->
 <div class="row">
-  <div class="col-8 offset-2 mt-3">
+  <div class="col-12 col-md-8 offset-md-2 mt-3">
     <h3><%= listing.title %></h3>
   </div>
 </div>
@@ -12,8 +12,8 @@
 <!-- ========================= -->
 <!-- ✅ LISTING CARD -->
 <!-- ========================= -->
-<div class="row">
-  <div class="card col-4 offset-2 show-card listing-card">
+<div class="row justify-content-center">
+  <div class="card col-12 col-md-8 show-card listing-card">
 
     <img
       src="<%= listing.image.url ? listing.image.url : listing.image %>"
@@ -45,10 +45,10 @@
 <!-- ========================= -->
 <!-- ✅ EDIT + DELETE BUTTONS -->
 <!-- ========================= -->
-<div class="row">
+<div class="row justify-content-center">
   <% if (currUser && listing.owner && currUser._id.equals(listing.owner._id)) { %>
 
-    <div class="d-flex gap-2 offset-2 mt-3">
+    <div class="col-12 d-flex flex-wrap gap-2 justify-content-center mt-3">
       <a
         href="/listings/<%= listing._id %>/edit"
         class="btn btn-dark btn-sm"
@@ -72,8 +72,8 @@
 <!-- ========================= -->
 <!-- ✅ REVIEWS SECTION -->
 <!-- ========================= -->
-<div class="row">
-  <div class="col-8 offset-2 mt-3 mb-3">
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 mt-3 mb-3">
 
     <hr>
 
@@ -143,28 +143,32 @@
     <!-- ✅ All Reviews -->
     <p><b>All Reviews</b></p>
 
-    <div class="row">
+    <div class="row g-3">
 
       <% for (review of listing.reviews) { %>
 
-        <div class="card col-5 ms-3 mb-3">
+        <div class="col-12 col-md-5">
+          <div class="card mb-3">
 
-          <h5 class="card-title">
-            @<%= review.author ? review.author.username : "Anonymous User" %>
-          </h5>
+            <div class="card-body">
+              <h5 class="card-title">
+                @<%= review.author ? review.author.username : "Anonymous User" %>
+              </h5>
 
-          <p class="starability-result card-text" data-rating="<%= review.rating %>"></p>
+              <p class="starability-result card-text" data-rating="<%= review.rating %>"></p>
 
-          <p class="card-text"><%= review.comment %></p>
+              <p class="card-text"><%= review.comment %></p>
 
-          <form
-            class="mb-3"
-            method="POST"
-            action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
-          >
-            <button class="btn btn-sm btn-dark">Delete</button>
-          </form>
+              <form
+                class="mb-3"
+                method="POST"
+                action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
+              >
+                <button class="btn btn-sm btn-dark">Delete</button>
+              </form>
+            </div>
 
+          </div>
         </div>
 
       <% } %>
@@ -172,7 +176,7 @@
     </div>
 
 <!-- ✅ MAP SECTION -->
-<div class="col-8 offset-2 mt-5 mb-5">
+<div class="col-12 mt-5 mb-5">
   <h4>Listing Location</h4>
 
   <div
